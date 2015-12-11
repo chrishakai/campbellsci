@@ -1,0 +1,48 @@
+#!/usr/bin/env node
+var program = require('commander');
+var request = require('request');
+var cheerio = require('cheerio');
+
+program
+  .version('0.0.1')
+  .option('-a, --host-address <ip>', 'IP Address of Campbell Scientific logger (192.168.1.50 or logger.example.com)')
+  .option('-p, --parameter <parameter>', 'Return only the parameter you are looking for.')
+  .parse(process.argv);
+
+//console.log(program);
+if(!program.hostAddress) {
+  console.log("--host-address (-h) not set. --help for more information");
+  process.exit("--host-address (-h) not set. --help for more information");
+}
+var options = {
+  url: 'http://' + program.hostAddress + '/?command=NewestRecord&table=Public',
+  headers: {
+    'Referer': 'http://' + program.hostAddress + '/'
+  }
+};
+
+function callback(error, response, body) {
+  //console.log(error);
+  //console.log(response);
+  if (!error && response.statusCode == 200) {
+    //console.log(body);
+    $ = cheerio.load(body);
+    
+    var sensors = { datetime: $('body').children('b')[1].children[0].parent.next.data, readings: [] };
+
+    for (i = 0; i < $('table').children().length; i++) {
+      if ($('table').children()[i].children[0].children[0].data == program.parameter) {
+        console.log($('table').children()[i].children[1].children[0].data);
+      }
+      sensors.readings[i] = {
+        name: $('table').children()[i].children[0].children[0].data,
+        value: $('table').children()[i].children[1].children[0].data
+      };
+    }
+  }
+  if(!program.parameter) {
+    console.log( sensors );
+  }
+}
+ 
+request(options, callback);
