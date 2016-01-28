@@ -23,3 +23,16 @@ Follow the instructions at the [installer](http://nodejs.org/#download) site
 
 ## Usage
 `campbellsci -h`
+
+  `Usage: campbellsci [options]`
+
+  `Options:`
+
+  ` -h, --help                   output usage information`
+  
+  ` -V, --version                output the version number`
+  
+  ` -a, --host-address <ip>      IP Address of Campbell Scientific logger (192.168.1.50 or logger.example.com)`
+  
+  ` -p, --parameter <parameter>  Return only the parameter you are looking for.`
+  
