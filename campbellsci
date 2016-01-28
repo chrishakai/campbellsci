@@ -11,8 +11,8 @@ program
 
 //console.log(program);
 if(!program.hostAddress) {
-  console.log("--host-address (-h) not set. --help for more information");
-  process.exit("--host-address (-h) not set. --help for more information");
+  console.log("--host-address (-a) not set. --help for more information");
+  process.exit("--host-address (-a) not set. --help for more information");
 }
 var options = {
   url: 'http://' + program.hostAddress + '/?command=NewestRecord&table=Public',
